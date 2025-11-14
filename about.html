@@ -1,13 +1,26 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>About — Semi Silicon Labs</title>
 <link rel="stylesheet" href="style.css"></head><body>
-<header class="header">
-  <div class="container header-inner">
-    <div class="brand-left" role="banner">
-      <div class="company">Semi Silicon Labs</div>
-      <div class="tagline">Engineering Tomorrow's Silicon</div>
+<header class="site-header" role="banner">
+  <div class="topbar">
+    <div class="topbar-inner container">
+      <div class="contact-line">contact@semisiliconlabs.com · hr@semisiliconlabs.com</div>
     </div>
-    <nav class="nav-right" role="navigation" aria-label="Main navigation">
+  </div>
+
+  <div class="header-main container">
+    <div class="brand" aria-label="Semi Silicon Labs">
+      <a href="index.html" class="brand-link">
+        <div class="brand-name">Semi Silicon Labs</div>
+        <div class="brand-tag">Engineering Tomorrow's Silicon</div>
+      </a>
+    </div>
+
+    <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Toggle navigation">
+      <span class="hamburger"></span>
+    </button>
+
+    <nav id="main-nav" class="main-nav" role="navigation" aria-label="Main navigation">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="services.html">Services</a>
