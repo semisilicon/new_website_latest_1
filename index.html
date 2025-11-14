@@ -1,58 +1,173 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Semi Silicon Labs — Home</title>
-<link rel="stylesheet" href="style.css"></head><body>
-<header class="header">
-  <div class="container header-inner">
-    <div class="brand-left" role="banner">
-      <div class="company">Semi Silicon Labs</div>
-      <div class="tagline">Engineering Tomorrow's Silicon</div>
-    </div>
-    <nav class="nav-right" role="navigation" aria-label="Main navigation">
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="services.html">Services</a>
-      <a href="careers.html">Careers</a>
-      <a href="ai.html">AI Assistant</a>
-      <a href="contact.html">Contact</a>
-    </nav>
-  </div>
-</header>
-<main>
-  <section class="hero container">
-    <div class="left">
-      <h1>Engineering Tomorrow's Silicon</h1>
-      <p class="lead">End-to-end semiconductor engineering — RTL design, verification, post-silicon validation, and firmware testing.</p>
-      <p><a class="btn btn-primary" href="contact.html">Contact Us</a></p>
-    </div>
-    <div class="right card" style="min-width:260px">
-      <h3>Quick Highlights</h3>
-      <ul style="margin:8px 0 0 18px;color:var(--muted)">
-        <li>RTL & VLSI Design</li>
-        <li>Verification & V&V (UVM)</li>
-        <li>Post-Silicon Validation</li>
-        <li>Firmware Testing & Automation</li>
-      </ul>
-    </div>
-  </section>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Semi Silicon Labs — Home</title>
+  <!-- If you keep an external style.css, you can remove the <style> block below. -->
+  <link rel="stylesheet" href="style.css">
 
-  <section class="section container">
-    <h2>Our Services</h2>
-    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px">
-      <div class="card"><h4>RTL Design</h4><p class="lead" style="color:var(--muted)">End-to-end RTL development for ASIC and FPGA platforms using Verilog/SystemVerilog. 
-       Expertise in micro-architecture design, synthesis-friendly coding practices, 
-       timing closure, and custom IP development.</p></div>
-      <div class="card"><h4>Verification</h4><p class="lead" style="color:var(--muted)">UVM-based verification for complex ASIC/SoC designs. Skilled in building scalable 
-       testbench architectures, functional & code coverage closure, constrained-random 
-       verification, assertion-based verification (SVA), and regression automation.</p></div>
-      <div class="card"><h4>Firmvare Validation</h4><p class="lead" style="color:var(--muted)">Board bring-up, silicon debugging, and system-level validation using JTAG, oscilloscopes, 
-       logic analyzers, and other lab equipment. Experience in firmware bring-up, performance 
-       analysis, stress testing, and platform reliability measurements.</p></div>
+  <style>
+    /* --- Layout container --- */
+    :root{
+      --max-width:1200px;
+      --gap:24px;
+      --muted:#6b7280;
+      --accent:#0b5ed7;
+      --bg:#f7fafc;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    html,body{height:100%;margin:0}
+    body{background:var(--bg);color:#0f172a;line-height:1.45}
+
+    /* Site container centered content */
+    .container{
+      max-width:var(--max-width);
+      margin:0 auto;
+      padding:0 22px;
+      box-sizing:border-box;
+    }
+
+    @media(min-width:1400px){
+      .container{max-width:1400px;padding:0 32px}
+    }
+
+    /* Header full-width but inner content centered via .container */
+    .header{width:100%;background:#0f2740;color:#fff}
+    .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand-left .company{font-weight:700;font-size:20px}
+    .brand-left .tagline{font-size:13px;color:rgba(255,255,255,0.85)}
+    .nav-right a{color:#fff;text-decoration:none;margin-left:18px;font-weight:600}
+
+    /* HERO: use a responsive two-column layout */
+    .hero{display:grid;grid-template-columns:1fr 320px;gap:var(--gap);align-items:start;padding:48px 0}
+    @media(max-width:900px){
+      .hero{grid-template-columns:1fr;}
+    }
+
+    .hero .left h1{font-size:36px;margin:6px 0 12px}
+    .lead{color:var(--muted);margin:0}
+    .btn{display:inline-block;padding:10px 16px;border-radius:8px;text-decoration:none}
+    .btn-primary{background:var(--accent);color:#fff}
+
+    /* Quick highlights card */
+    .card{background:#fff;border-radius:10px;padding:18px;box-shadow:0 6px 18px rgba(2,6,23,0.06)}
+    .card h3{margin:0 0 8px}
+    .card ul{margin:8px 0 0 18px;color:var(--muted)}
+
+    /* Services section */
+    .section{padding:36px 0}
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;margin-top:18px}
+    .service-card{background:#fff;padding:20px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,0.04)}
+    .service-card h4{margin:0 0 8px}
+    .service-card .lead{color:var(--muted);margin:0}
+
+    /* Footer */
+    .footer{background:#0f172a;color:#fff;padding:18px 0;margin-top:30px}
+    .footer p{margin:0;text-align:center}
+
+    /* small screens adjustments */
+    @media(max-width:520px){
+      .brand-left .company{font-size:18px}
+      .hero .left h1{font-size:28px}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header (full width) -->
+  <header class="header">
+    <div class="container header-inner">
+      <div class="brand-left" role="banner">
+        <div class="company">Semi Silicon Labs</div>
+        <div class="tagline">Engineering Tomorrow's Silicon</div>
+      </div>
+
+      <nav class="nav-right" role="navigation" aria-label="Main navigation">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="careers.html">Careers</a>
+        <a href="ai.html">AI Assistant</a>
+        <a href="contact.html">Contact</a>
+      </nav>
     </div>
-  </section>
-</main>
-<script src="chat.js"></script>
-<footer class="footer">
-  <div class="container"><p>&copy; 2025 Semi Silicon Labs Private Limited</p></div>
-</footer>
+  </header>
+
+  <!-- Main centered container -->
+  <main>
+    <div class="container">
+
+      <!-- HERO section (left: content, right: quick highlights card) -->
+      <section class="hero">
+        <div class="left">
+          <h1>Engineering Tomorrow's Silicon</h1>
+          <p class="lead">End-to-end semiconductor engineering — RTL design, verification, post-silicon validation, and firmware testing.</p>
+          <p style="margin-top:18px"><a class="btn btn-primary" href="contact.html">Contact Us</a></p>
+        </div>
+
+        <aside class="right card" aria-label="Quick highlights">
+          <h3>Quick Highlights</h3>
+          <ul>
+            <li>RTL &amp; VLSI Design and custom IP development</li>
+            <li>Verification &amp; V&amp;V: UVM, assertions, coverage closure</li>
+            <li>Post-Silicon Validation, board bring-up & silicon debug</li>
+            <li>Firmware testing, automation & performance analysis</li>
+          </ul>
+        </aside>
+
+      </section>
+
+      <!-- Our Services -->
+      <section class="section">
+        <h2>Our Services</h2>
+
+        <div class="services-grid" role="list">
+
+          <article class="service-card" role="listitem">
+            <h4>RTL Design</h4>
+            <p class="lead">End-to-end RTL development for ASIC and FPGA platforms using Verilog/SystemVerilog. Expertise in micro-architecture design, synthesis-friendly coding, timing closure, and custom IP.</p>
+          </article>
+
+          <article class="service-card" role="listitem">
+            <h4>Verification</h4>
+            <p class="lead">UVM-based verification for complex ASIC/SoC designs — scalable testbenches, constrained-random verification, assertions (SVA), and automation for regression and coverage closure.</p>
+          </article>
+
+          <article class="service-card" role="listitem">
+            <h4>Firmware Validation</h4>
+            <p class="lead">Board bring-up, silicon debugging and system-level validation using JTAG, oscilloscopes, logic analyzers, and lab tools. Firmware bring-up, stress testing and platform reliability analysis.</p>
+          </article>
+
+          <article class="service-card" role="listitem">
+            <h4>Post-Silicon Test & Characterization</h4>
+            <p class="lead">Functional characterization, performance tuning and silicon validation across environmental and electrical corners. Custom test development for production validation.</p>
+          </article>
+
+          <article class="service-card" role="listitem">
+            <h4>Automation & Test Infrastructure</h4>
+            <p class="lead">Test automation frameworks, continuous integration for silicon/firmware regression, bench orchestration and data collection for analytics.</p>
+          </article>
+
+          <article class="service-card" role="listitem">
+            <h4>Consulting & IP Reuse</h4>
+            <p class="lead">Architecture reviews, RTL/code quality audits, and IP integration services to accelerate time-to-market while minimizing silicon risk.</p>
+          </article>
+
+        </div>
+      </section>
+
+    </div> <!-- /.container -->
+  </main>
+
+  <footer class="footer">
+    <div class="container"><p>&copy; 2025 Semi Silicon Labs Private Limited</p></div>
+  </footer>
+
+  <!-- optional scripts -->
+  <script src="chat.js"></script>
+  <!-- include.js placeholder: if you want to load reusable includes from /includes, set the path accordingly -->
   <script src="/include.js" defer></script>
-</body></html>
+</body>
+</html>
