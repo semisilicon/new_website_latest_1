@@ -1,153 +1,57 @@
-:root{
-  --nav-bg:#0f3245;   /* dark blue header */
-  --nav-text:#ffffff;
-  --container-width:1200px;
-  --muted:#6b7280;
-  --accent:#1765b3;
+:root{--navy:#0b2545;--accent:#0e63b6;--muted:#5a6b85;--maxw:1100px}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--navy);background:#fff;line-height:1.6}
+.container{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+.header{background:#fff;border-bottom:1px solid #eef6ff;position:sticky;top:0;z-index:100}
+.header-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 0;gap:12px}
+.brand-left{display:flex;flex-direction:column;align-items:flex-start}
+.brand-left .company{font-weight:800;font-size:18px}
+.brand-left .tagline{font-size:12px;color:var(--muted);margin-top:4px}
+.nav-right a{margin-left:18px;text-decoration:none;color:var(--navy);font-weight:600}
+.hero{padding:48px 0;background:linear-gradient(180deg,#f7fbff,#fff);display:flex;align-items:flex-start;gap:30px;flex-wrap:wrap}
+.hero .left{flex:1;min-width:260px}
+.hero h1{font-size:32px;margin:0;color:var(--navy)}
+.lead{color:var(--muted);max-width:720px}
+.card{background:#fff;border-radius:8px;padding:18px;border:1px solid #f0f7ff;box-shadow:0 6px 18px rgba(11,37,69,0.03)}
+.section{padding:36px 0}
+.section.alt{background:#fbfdff}
+.footer{padding:22px 0;text-align:center;color:var(--muted);font-size:14px;border-top:1px solid #eef6ff;margin-top:24px}
+.btn{display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:700}
+.btn-primary{background:var(--accent);color:#fff}
+@media (max-width:800px){ .nav-right{display:flex;flex-wrap:wrap;gap:8px} .header-inner{align-items:flex-start} .hero{flex-direction:column} }
+/* Put this near the end of your style.css so it overrides earlier rules */
+
+/* 1) New site container rules */
+.site-container {
+  max-width: 1200px;     /* widen the central column on big screens */
+  margin: 0 auto;        /* center horizontally */
+  padding: 0 24px;       /* small left/right padding for small screens */
+  box-sizing: border-box;
 }
 
-/* basic container shared with your page */
-.container{
-  max-width:var(--container-width);
-  margin:0 auto;
-  padding:0 20px;
-  box-sizing:border-box;
+/* 2) Make hero and two-column areas use the site container */
+.hero, .content-section, .services-grid {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-/* Top contact strip */
-.topbar{
-  background:var(--nav-bg);
-  color:var(--nav-text);
-  font-size:13px;
-}
-.topbar-inner{
-  display:flex;
-  align-items:center;
-  height:36px;
-}
-.topbar .contact-line{
-  width:100%;
-  text-align:right;
-  color:rgba(255,255,255,0.85);
+/* 3) Slightly reduce inner card paddings so boxes don't push out too far */
+.quick-highlights, .service-card {
+  padding: 20px; /* lower if needed (was likely larger) */
 }
 
-/* Main header */
-.site-header{
-  box-shadow: 0 1px 0 rgba(0,0,0,0.05);
-  background:var(--nav-bg);
-  color:var(--nav-text);
-  position:sticky;
-  top:0;
-  z-index:60;
+/* 4) Larger screens — give a bit more width */
+@media (min-width: 1400px) {
+  .site-container { max-width: 1400px; padding: 0 36px; }
 }
 
-/* header content row */
-.header-main{
-  display:flex;
-  align-items:center;
-  gap:20px;
-  height:84px;
-}
+/* 5) Make sure header / nav still stretches full width while content is centered */
+.site-header { width: 100%; }
+.site-header .site-container { display:flex; align-items:center; justify-content:space-between; }
 
-/* Brand */
-.brand-link{
-  display:inline-block;
-  text-decoration:none;
-  color:var(--nav-text);
-}
-.brand-name{
-  font-weight:700;
-  font-size:20px;
-  line-height:1;
-}
-.brand-tag{
-  font-size:13px;
-  color:rgba(255,255,255,0.85);
-  margin-top:3px;
-}
-
-/* Navigation */
-.main-nav{
-  margin-left:auto;
-  display:flex;
-  gap:28px;
-  align-items:center;
-}
-.main-nav a{
-  color:var(--nav-text);
-  text-decoration:none;
-  font-weight:500;
-  padding:6px 0;
-  transition:color .15s ease, opacity .15s ease;
-}
-.main-nav a:hover,
-.main-nav a:focus{
-  color:#ffd;
-  opacity:0.95;
-}
-
-/* Nav toggle (mobile) */
-.nav-toggle{
-  display:none;
-  background:none;
-  border:0;
-  margin-left:auto;
-  width:40px;
-  height:40px;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-}
-.hamburger{
-  display:inline-block;
-  width:22px;
-  height:2px;
-  background:var(--nav-text);
-  position:relative;
-}
-.hamburger::before,
-.hamburger::after{
-  content:"";
-  position:absolute;
-  left:0;
-  width:22px;
-  height:2px;
-  background:var(--nav-text);
-}
-.hamburger::before{ top:-7px; }
-.hamburger::after{ top:7px; }
-
-/* Responsive */
-@media (max-width: 900px){
-  .header-main{ height:72px; gap:12px; }
-
-  /* move brand left, nav becomes hidden and toggled */
-  .main-nav{
-    position:fixed;
-    top:0;
-    right:0;
-    width:260px;
-    height:100vh;
-    background:var(--nav-bg);
-    flex-direction:column;
-    padding:84px 18px;
-    transform:translateX(100%);
-    transition:transform .25s ease;
-    gap:18px;
-    align-items:flex-start;
-  }
-  .main-nav a{ padding:8px 6px; }
-
-  .nav-toggle{ display:flex; }
-
-  /* when nav is open */
-  .main-nav.open{ transform:translateX(0); }
-
-  /* hide topbar contact on small screens for space */
-  .topbar{ display:none; }
-}
-
-/* small visual tweak for desktop container edges */
-@media (min-width: 901px){
-  .container{ padding-left:36px; padding-right:36px; }
+/* 6) Small screens keep full width behavior */
+@media (max-width: 767px) {
+  .site-container { padding: 0 18px; }
+  .quick-highlights, .service-card { padding: 16px; }
 }
