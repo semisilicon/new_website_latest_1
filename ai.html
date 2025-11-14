@@ -51,4 +51,236 @@
     });
   })();
 </script>
+  <!--
+chat-widget.html
+A self-contained, lightweight, accessible chat widget you can drop into any static site.
+How to use:
+ 1. Copy this file into your project and include it (or paste its contents) before </body>.
+ 2. If you want real AI replies, replace `sendToServer()` with a function that calls your backend (or OpenAI) and returns a promise that resolves to a reply string.
+ 3. Customize colors in :root CSS variables.
+
+Features:
+ - Floating minimized button with unread badge
+ - Expandable chat panel with header, messages, and composer
+ - Message history saved in localStorage
+ - Typing indicator, quick replies, and simple animations
+ - Clean, mobile-friendly responsive layout
+ - Hooks for real backend integration (sendToServer)
+-->
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Chat Widget</title>
+<style>
+:root{
+  --brand:#0b5b8a; /* primary color */
+  --bg: #ffffff;
+  --panel-bg: #f7fbff;
+  --muted:#6b7280;
+  --accent:#0ea5a4;
+  --shadow: 0 6px 20px rgba(6, 17, 27, 0.12);
+}
+/* Reset small bits for widget */
+.chat-root{all:initial;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;position:fixed;right:20px;bottom:20px;z-index:99999}
+.chat-btn{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:999px;background:var(--brand);color:#fff;box-shadow:var(--shadow);position:relative}
+.chat-badge{position:absolute;top:-6px;right:-6px;background:#ff3b30;color:#fff;border-radius:999px;padding:2px 6px;font-size:12px}
+
+.chat-panel{width:360px;max-width:calc(100vw - 40px);height:520px;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;background:var(--bg)}
+.chat-header{background:linear-gradient(180deg,var(--brand),#053b57);color:#fff;padding:12px 14px;display:flex;align-items:center;gap:10px}
+.chat-title{font-weight:700;font-size:16px}
+.chat-sub{font-size:12px;opacity:.9}
+.chat-close{margin-left:auto;all:unset;cursor:pointer;color:#fff}
+
+.chat-body{flex:1;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--panel-bg);overflow:auto}
+.msg{max-width:78%;padding:10px 12px;border-radius:10px;font-size:14px;line-height:1.3}
+.msg.user{margin-left:auto;background:#0b5b8a;color:#fff;border-bottom-right-radius:4px}
+.msg.bot{background:#fff;color:#0b1720;border:1px solid rgba(6,17,27,0.06);border-bottom-left-radius:4px}
+.msg.small{font-size:12px;padding:6px 8px;opacity:.85}
+
+.typing{display:flex;gap:4px;align-items:center}
+.dot{width:6px;height:6px;border-radius:50%;background:#9ca3af;opacity:.8;animation:blink 1.2s infinite}
+.dot:nth-child(2){animation-delay:.15s}
+.dot:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%{transform:translateY(0);opacity:.25}50%{transform:translateY(-4px);opacity:1}100%{transform:translateY(0);opacity:.25}}
+
+.chat-composer{padding:10px;border-top:1px solid rgba(6,17,27,0.06);display:flex;gap:8px;align-items:center;background:var(--bg)}
+.input{flex:1;padding:8px 12px;border-radius:999px;border:1px solid rgba(6,17,27,0.08);background:#fff;font-size:14px}
+.btn-send{all:unset;padding:8px 12px;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer}
+.quick-replies{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.quick{background:#e6f6f5;padding:6px 10px;border-radius:999px;font-size:13px;cursor:pointer;color:var(--brand)}
+
+/* collapsed state */
+.chat-collapsed{display:flex;flex-direction:column;align-items:flex-end}
+.chat-panel.hide{display:none}
+
+/* small screens */
+@media (max-width:420px){.chat-panel{right:10px;left:10px;bottom:10px;top:auto;width:auto;height:80vh;border-radius:12px}}
+</style>
+</head>
+<body>
+
+<!-- Widget root -->
+<div class="chat-root" id="chat-root" aria-live="polite">
+  <div id="chat-collapsed" class="chat-collapsed">
+    <button id="open-chat" class="chat-btn" title="Open chat" aria-label="Open chat">
+      💬
+      <span id="unread" class="chat-badge" style="display:none">0</span>
+    </button>
+  </div>
+
+  <div id="chat-panel" class="chat-panel" role="dialog" aria-modal="false" aria-hidden="true" style="display:none">
+    <div class="chat-header">
+      <div>
+        <div class="chat-title">Semi Silicon Assistant</div>
+        <div class="chat-sub">Ask about services, hiring, or support</div>
+      </div>
+      <button id="close-chat" class="chat-close" aria-label="Close chat">✕</button>
+    </div>
+
+    <div id="chat-body" class="chat-body" role="log" aria-live="polite"></div>
+
+    <div style="padding:0 12px">
+      <div id="quick" class="quick-replies" aria-hidden="false">
+        <button class="quick">Tell me about RTL services</button>
+        <button class="quick">Open positions</button>
+        <button class="quick">Contact sales</button>
+      </div>
+    </div>
+
+    <div class="chat-composer" role="form" aria-label="Chat composer">
+      <input id="chat-input" class="input" placeholder="Type a message..." aria-label="Type a message" />
+      <button id="send-btn" class="btn-send" aria-label="Send message">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Minimal, dependency-free JS for the widget */
+(function(){
+  const root = document.getElementById('chat-root');
+  const panel = document.getElementById('chat-panel');
+  const openBtn = document.getElementById('open-chat');
+  const closeBtn = document.getElementById('close-chat');
+  const body = document.getElementById('chat-body');
+  const input = document.getElementById('chat-input');
+  const sendBtn = document.getElementById('send-btn');
+  const unread = document.getElementById('unread');
+  const quick = document.getElementById('quick');
+
+  // localStorage key
+  const LS = 'semisil_chat_v1';
+  let unreadCount = 0;
+  let history = loadHistory();
+
+  // initial render of history
+  renderHistory();
+
+  openBtn.addEventListener('click', openChat);
+  closeBtn.addEventListener('click', closeChat);
+  sendBtn.addEventListener('click', onSend);
+  input.addEventListener('keydown', (e)=>{ if(e.key==='Enter') onSend(); });
+  quick.addEventListener('click', (e)=>{ if(e.target.classList.contains('quick')) sendQuick(e.target.innerText); });
+
+  function openChat(){
+    panel.style.display='flex';
+    panel.setAttribute('aria-hidden','false');
+    openBtn.style.display='none';
+    unreadCount = 0; updateBadge();
+    scrollToBottom();
+    input.focus();
+  }
+  function closeChat(){
+    panel.style.display='none';
+    panel.setAttribute('aria-hidden','true');
+    openBtn.style.display='flex';
+    openBtn.focus();
+  }
+
+  function onSend(){
+    const text = input.value.trim();
+    if(!text) return;
+    pushMessage({who:'user', text, ts:Date.now()});
+    input.value='';
+    // show typing
+    const typingNode = makeTyping();
+    body.appendChild(typingNode);
+    scrollToBottom();
+
+    // send to server (replace with your integration)
+    sendToServer(text).then(replyText=>{
+      typingNode.remove();
+      pushMessage({who:'bot', text:replyText, ts:Date.now()});
+    }).catch(err=>{
+      typingNode.remove();
+      pushMessage({who:'bot', text:'Sorry — I could not reach the server. Try again later.', ts:Date.now()});
+      console.error(err);
+    });
+  }
+
+  function sendQuick(txt){ input.value = txt; onSend(); }
+
+  function pushMessage(msg){ history.push(msg); saveHistory(); renderMessage(msg); }
+
+  function renderHistory(){ body.innerHTML=''; history.forEach(renderMessage); scrollToBottom(); }
+
+  function renderMessage(msg){
+    const d = document.createElement('div');
+    d.className = 'msg ' + (msg.who==='user' ? 'user' : 'bot');
+    d.innerText = msg.text;
+    d.setAttribute('data-ts', msg.ts);
+    body.appendChild(d);
+    scrollToBottom();
+    // when closed increase unread
+    if(panel.style.display==='none' || panel.getAttribute('aria-hidden')==='true'){
+      unreadCount++; updateBadge();
+    }
+  }
+
+  function makeTyping(){
+    const wrap = document.createElement('div');
+    wrap.className='msg bot typing';
+    const dotWrap = document.createElement('div');
+    dotWrap.className='typing';
+    dotWrap.innerHTML = '<span class="dot" aria-hidden></span><span class="dot" aria-hidden></span><span class="dot" aria-hidden></span>';
+    wrap.appendChild(dotWrap);
+    return wrap;
+  }
+
+  function scrollToBottom(){ body.scrollTop = body.scrollHeight; }
+
+  function saveHistory(){ try{ localStorage.setItem(LS, JSON.stringify(history.slice(-200))); }catch(e){} }
+  function loadHistory(){ try{ const raw = localStorage.getItem(LS); return raw?JSON.parse(raw):[ {who:'bot',text:'Hello! I\'m the Semi Silicon assistant — ask me about services, careers, or contact options.', ts:Date.now()} ]; }catch(e){ return []; } }
+
+  function updateBadge(){ if(unreadCount>0){ unread.style.display='inline-block'; unread.innerText = unreadCount>99?'99+':unreadCount } else unread.style.display='none' }
+
+  /* Placeholder network function — replace this with your actual API call.
+     Should return a Promise that resolves to a string reply. */
+  function sendToServer(userText){
+    return new Promise((resolve)=>{
+      // quick simulated responses for demo
+      const t = userText.toLowerCase();
+      setTimeout(()=>{
+        if(t.includes('rtl')) resolve('We provide RTL & microarchitecture design for ASIC and FPGA platforms. Would you like our RTL services datasheet?');
+        else if(t.includes('career')||t.includes('position')||t.includes('job')) resolve('We are hiring — please share your CV at hr@semisiliconlabs.com. Current openings: Verification Engineer, Firmware Engineer.');
+        else if(t.includes('contact')||t.includes('sales')) resolve('You can reach us at contact@semisiliconlabs.com or use the contact form — how can I help further?');
+        else resolve("Thanks — I\'ll pass this to the team. If you want an instant answer, ask about 'services', 'careers' or 'contact'.");
+      }, 700 + Math.random()*600);
+    });
+  }
+
+  // Expose a small API to send messages programmatically
+  window.SemiChat = {
+    sendMessage: (txt)=>{ input.value = txt; onSend(); },
+    open: openChat,
+    close: closeChat
+  };
+
+})();
+</script>
+
+</body>
+</html>
 </body></html>
