@@ -19,3 +19,39 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetic
 .btn{display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:700}
 .btn-primary{background:var(--accent);color:#fff}
 @media (max-width:800px){ .nav-right{display:flex;flex-wrap:wrap;gap:8px} .header-inner{align-items:flex-start} .hero{flex-direction:column} }
+/* Put this near the end of your style.css so it overrides earlier rules */
+
+/* 1) New site container rules */
+.site-container {
+  max-width: 1200px;     /* widen the central column on big screens */
+  margin: 0 auto;        /* center horizontally */
+  padding: 0 24px;       /* small left/right padding for small screens */
+  box-sizing: border-box;
+}
+
+/* 2) Make hero and two-column areas use the site container */
+.hero, .content-section, .services-grid {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* 3) Slightly reduce inner card paddings so boxes don't push out too far */
+.quick-highlights, .service-card {
+  padding: 20px; /* lower if needed (was likely larger) */
+}
+
+/* 4) Larger screens — give a bit more width */
+@media (min-width: 1400px) {
+  .site-container { max-width: 1400px; padding: 0 36px; }
+}
+
+/* 5) Make sure header / nav still stretches full width while content is centered */
+.site-header { width: 100%; }
+.site-header .site-container { display:flex; align-items:center; justify-content:space-between; }
+
+/* 6) Small screens keep full width behavior */
+@media (max-width: 767px) {
+  .site-container { padding: 0 18px; }
+  .quick-highlights, .service-card { padding: 16px; }
+}
