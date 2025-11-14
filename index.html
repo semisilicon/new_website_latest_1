@@ -77,23 +77,36 @@
 <body>
 
   <!-- Header (full width) 
-  <header class="header">
-    <div class="container header-inner">
-      <div class="brand-left" role="banner">
-        <div class="company">Semi Silicon Labs</div>
-        <div class="tagline">Engineering Tomorrow's Silicon</div>
-      </div>-->
-
-      <nav class="nav-right" role="navigation" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="services.html">Services</a>
-        <a href="careers.html">Careers</a>
-        <a href="ai.html">AI Assistant</a>
-        <a href="contact.html">Contact</a>
-      </nav>
+  <header class="site-header" role="banner">
+  <div class="topbar">
+    <div class="topbar-inner container">
+      <div class="contact-line">contact@semisiliconlabs.com · hr@semisiliconlabs.com</div>
     </div>
-  </header>
+  </div>
+
+  <div class="header-main container">
+    <div class="brand" aria-label="Semi Silicon Labs">
+      <a href="index.html" class="brand-link">
+        <div class="brand-name">Semi Silicon Labs</div>
+        <div class="brand-tag">Engineering Tomorrow's Silicon</div>
+      </a>
+    </div>
+
+    <button class="nav-toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Toggle navigation">
+      <span class="hamburger"></span>
+    </button>
+
+    <nav id="main-nav" class="main-nav" role="navigation" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="careers.html">Careers</a>
+      <a href="ai.html">AI Assistant</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
 
   <!-- Main centered container -->
   <main>
