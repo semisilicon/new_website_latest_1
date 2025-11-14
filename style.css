@@ -55,3 +55,7 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetic
   .site-container { padding: 0 18px; }
   .quick-highlights, .service-card { padding: 16px; }
 }
+.chat-bubble, #chat-bubble {
+  display: none !important;
+}
+
