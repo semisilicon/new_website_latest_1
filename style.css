@@ -58,4 +58,111 @@ body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetic
 .chat-bubble, #chat-bubble {
   display: none !important;
 }
+/* --- Quick Highlights - Pro Version C --- */
+.quick-highlights.card { position:relative; overflow:visible; transition:transform .28s ease; }
+.quick-highlights.card h3 { margin:0 0 10px; font-size:16px; }
+.qh-list { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; }
+
+/* each item */
+.qh-list li {
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  background:linear-gradient(180deg, rgba(255,255,255,0.9), #fff);
+  padding:12px;
+  border-radius:10px;
+  cursor:pointer;
+  transform:translateY(0);
+  box-shadow:0 6px 18px rgba(2,6,23,0.04);
+  transition: transform .35s cubic-bezier(.2,.9,.2,1), box-shadow .35s ease, background .25s ease;
+  outline: none;
+  --delay: 0ms;
+  will-change: transform, box-shadow;
+  border:1px solid rgba(8,16,30,0.03);
+}
+
+/* stagger entrance animation using data-index or nth-child */
+.qh-list li { opacity:0; transform: translateY(10px) scale(.995); }
+.qh-list li[data-index="1"]{ transition-delay: 80ms; --delay:80ms; }
+.qh-list li[data-index="2"]{ transition-delay: 140ms; --delay:140ms; }
+.qh-list li[data-index="3"]{ transition-delay: 200ms; --delay:200ms; }
+.qh-list li[data-index="4"]{ transition-delay: 260ms; --delay:260ms; }
+.qh-list li[data-index="5"]{ transition-delay: 320ms; --delay:320ms; }
+
+/* when .quick-highlights appears, animate children in (add .active via JS or rely on page load) */
+.quick-highlights.card .qh-list li { animation: qhIn .44s forwards; animation-timing-function: cubic-bezier(.2,.9,.2,1); }
+@keyframes qhIn {
+  to { opacity:1; transform: translateY(0) scale(1); }
+}
+
+/* icon (hidden until hover) */
+.qh-list .icon {
+  width:34px; height:34px; flex:0 0 34px; display:inline-flex; align-items:center; justify-content:center;
+  color:var(--accent, #0b5b8a);
+  border-radius:8px;
+  transform: translateX(-6px) scale(.85);
+  opacity:0;
+  transition: transform .28s cubic-bezier(.2,.9,.2,1), opacity .28s ease, background .25s ease;
+  background: linear-gradient(180deg, rgba(11,91,138,0.06), rgba(11,91,138,0.03));
+}
+
+/* text */
+.qh-list .text { color: #0b172a; font-size:14px; line-height:1.35; transition: color .2s ease, transform .25s ease; }
+
+/* hover / focus effects (both mouse and keyboard accessible) */
+.qh-list li:hover,
+.qh-list li:focus {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: 0 16px 40px rgba(6,17,27,0.12);
+  background: linear-gradient(180deg,#ffffff, #f8fbff);
+  z-index:2;
+}
+
+/* reveal icon on hover (and move text slightly) */
+.qh-list li:hover .icon,
+.qh-list li:focus .icon {
+  opacity:1;
+  transform: translateX(0) scale(1);
+}
+
+/* text push */
+.qh-list li:hover .text,
+.qh-list li:focus .text { transform: translateX(6px); color:var(--accent,#0b5b8a); }
+
+/* subtle left-side glow (pseudo-element ripple) */
+.qh-list li::before {
+  content: "";
+  position: absolute;
+  left:12px;
+  top:50%;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  transform: translateY(-50%) scale(0);
+  background: linear-gradient(90deg, rgba(11,91,138,0.14), rgba(11,91,138,0.06));
+  transition: transform .42s cubic-bezier(.2,.9,.2,1), opacity .3s ease;
+  opacity:0;
+  pointer-events:none;
+}
+
+/* on hover expand ripple */
+.qh-list li:hover::before,
+.qh-list li:focus::before {
+  transform: translateY(-50%) scale(10);
+  opacity:1;
+}
+
+/* accessible keyboard focus styles */
+.qh-list li:focus {
+  box-shadow: 0 10px 30px rgba(11,91,138,0.08);
+  border-color: rgba(11,91,138,0.12);
+}
+
+/* small screens adjustments */
+@media (max-width:900px){
+  .qh-list li { padding:10px; }
+  .qh-list .icon { width:28px; height:28px; flex:0 0 28px; }
+}
+
 
