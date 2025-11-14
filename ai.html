@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>AI Assistant — Semi Silicon Labs</title>
+<link rel="stylesheet" href="style.css"></head><body>
+<header class="header">
+  <div class="container header-inner">
+    <div class="brand-left" role="banner">
+      <div class="company">Semi Silicon Labs</div>
+      <div class="tagline">Engineering Tomorrow's Silicon</div>
+    </div>
+    <nav class="nav-right" role="navigation" aria-label="Main navigation">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="careers.html">Careers</a>
+      <a href="ai.html">AI Assistant</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+<main class="container section">
+  <h1>AI Assistant</h1>
+  <div id="chatPanel" style="border:1px solid #eee;padding:12px;border-radius:8px;max-width:720px">
+    <div id="chatBody" style="min-height:200px;padding:8px"></div>
+    <div style="margin-top:8px">
+      <textarea id="chatInput" rows="3" style="width:100%;"></textarea>
+      <button id="sendChat" style="margin-top:8px;padding:8px 12px">Send</button>
+    </div>
+  </div>
+  <p style="margin-top:12px;color:#666">Configure <code>OPENAI_API_KEY</code> in Vercel project settings.</p>
+</main>
+<script src="chat.js"></script>
+<footer class="footer">
+  <div class="container"><p>&copy; 2025 Semi Silicon Labs Private Limited</p></div>
+</footer>
+</body></html>
