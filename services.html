@@ -32,4 +32,22 @@
   <div class="container"><p>&copy; 2025 Semi Silicon Labs Private Limited</p></div>
 </footer>
   <script src="/include.js" defer></script>
+  <script>
+  (function(){
+    const btn = document.querySelector('.nav-toggle');
+    const nav = document.getElementById('main-nav');
+    if(!btn || !nav) return;
+    btn.addEventListener('click', ()=> {
+      const open = nav.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(open));
+    });
+    // close when clicking outside (mobile)
+    document.addEventListener('click', (e)=>{
+      if(!nav.classList.contains('open')) return;
+      if(e.target.closest('#main-nav') || e.target.closest('.nav-toggle')) return;
+      nav.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  })();
+</script>
 </body></html>
